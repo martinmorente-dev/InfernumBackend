@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # 2. Extensiones PHP completas
 RUN apt-get update && apt-get install -y libicu-dev \
-   && docker-php-ext-install \
+  && docker-php-ext-install \
   pdo pdo_mysql \
   xml \
   ctype \
@@ -44,3 +44,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
 
 RUN a2enmod rewrite headers ssl
 
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+RUN sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/sites-available/000-default.conf \
+  && sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/apache2.conf
