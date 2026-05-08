@@ -3,26 +3,27 @@ name: Deploy to AWS CodeDeploy
 on:
   push:
     branches:
-      - main # o la rama que uses para prod
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    environment: AWS Credentials
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-        # Action to configure the AWS credentials (acces key id, secret access key, region)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+ 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-east-1
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
 
-        # Create the zip for the codeploy
       - name: Zip source code
         run: |
           zip -r code-deploy-app.zip . \
@@ -30,17 +31,13 @@ jobs:
             --exclude="docker-compose.yml" \
             --exclude="storage/*.gitignore"
 
-        # Upload the zip code into the s3 bucket
       - name: Upload to S3
         run: |
-          aws s3 cp code-deploy-app.zip s3://infernum-bucket-3/$GITHUB_SHA.zip
+          aws s3 cp code-deploy-app.zip s3://${{vars.BUCKET}}/$GITHUB_SHA.zip
 
-        # TODO Put the S3 into the secrets
-        # Create the deployment
       - name: Create CodeDeploy deployment
         run: |
           aws deploy create-deployment \
-            --application-name InfernumAPI \
+            --application-name backend-app \
             --deployment-group-name backend-group \
-            --s3-location bucket="${{secrets.BUCKET_S3}}",key="$GITHUB_SHA.zip",bundleType="zip"
-
+            --s3-location bucket="${{vars.BUCKET}}",key="$GITHUB_SHA.zip",bundleType="zip"
