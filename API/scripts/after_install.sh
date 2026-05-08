@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# TODO desencrypt the production env
-
+# Take the ssmm secret to the apps key for decryption
 APP_KEY=$(aws ssm get-parameter \
   --name "/backend/app-key" \
   --with-decryption \
