@@ -1,0 +1,10 @@
+FROM base_image
+
+# Apache modules
+RUN a2enmod rewrite headers ssl
+
+# Edit the document root
+COPY utils/backend.conf /etc/apache2/sites-available/backend.conf
+
+# Enable the correct configuration file and disable the 000-default.conf
+RUN a2dissite 000-default.conf && a2ensite backend.conf

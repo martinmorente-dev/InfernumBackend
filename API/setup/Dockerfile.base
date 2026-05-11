@@ -1,0 +1,22 @@
+FROM php:8.4-apache
+
+# 1. Dependencias sistema + Apache
+RUN apt-get update && apt-get install -y \
+  curl \
+  unzip\
+  libxml2-dev \
+  libonig-dev \
+  libzip-dev \
+  && a2enmod rewrite headers ssl \
+  && rm -rf /var/lib/apt/lists/*
+
+# 2. Extensiones PHP completas
+RUN apt-get update && apt-get install -y libicu-dev \
+  && docker-php-ext-install \
+  pdo pdo_mysql \
+  xml \
+  ctype \
+  mbstring \
+  bcmath \
+  zip \
+  intl

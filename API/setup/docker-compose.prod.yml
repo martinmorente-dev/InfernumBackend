@@ -1,11 +1,14 @@
 services:
   app:
     container_name: Laravel
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.production
     volumes:
-      - "../.:/var/www/html"
+      - "../.:/var/www/html/public"
     ports:
-      - "80:8000"
+      - "80:80"
+      - "443:443"
     depends_on:
       - "db"
   db:
@@ -18,3 +21,8 @@ services:
       MYSQL_USER: "admin"
       MYSQL_PASSWORD: "admin"
       MYSQL_DATABASE: "Infernum"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
+volumes:
+  mysql_data:
