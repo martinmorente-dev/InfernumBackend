@@ -5,6 +5,8 @@ MYSQL_USER=$(aws ssm get-parameter --name "/infernum/MYSQL_USER" --with-decrypti
 MYSQL_PASSWORD=$(aws ssm get-parameter --name "/infernum/MYSQL_PASSWORD" --with-decryption --query "Parameter.Value" --output text --region us-east-1)
 MYSQL_DATABASE=$(aws ssm get-parameter --name "/infernum/MYSQL_DATABASE" --with-decryption --query "Parameter.Value" --output text --region us-east-1)
 
+rm -fr /var/www/html/public/Infernum-API/*
+
 mkdir -p /var/www/html/public/Infernum-API/API/setup/
 
 touch /var/www/html/public/Infernum-API/API/setup/.env
