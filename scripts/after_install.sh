@@ -12,11 +12,11 @@ cd /var/www/html/public/Infernum-API/API
 
 docker build -f setup/Dockerfile.base -t base_image .
 
-docker compose -f setup/docker-compose.prod up -d --build
+docker compose -f setup/docker-compose.prod.yml up -d --build
 
 docker compose exec -T Laravel composer install --no-dev --optimize-autoloader
 
-dockere compose exec -T Laravel php artisan env:descrypt --env=production --key=${APP_KEY}
+docker compose exec -T Laravel php artisan env:descrypt --env=production --key=${APP_KEY}
 
 docker compose exec -T Laravel npm install
 
