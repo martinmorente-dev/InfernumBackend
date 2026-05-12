@@ -8,11 +8,11 @@ APP_KEY=$(aws ssm get-parameter \
   --output text \
   --region us-east-1)
 
-cd /var/www/html/public/Infernum-API
+cd /var/www/html/public/Infernum-API/API
 
-docker build -f Dockerfile.base -t base_image .
+docker build -f setup/Dockerfile.base -t base_image .
 
-docker compose -f docker-compose.prod up -d --build
+docker compose -f setup/docker-compose.prod up -d --build
 
 docker compose exec -T Laravel composer install --no-dev --optimize-autoloader
 
