@@ -3,7 +3,7 @@ services:
     container_name: Laravel
     build:
       context: .
-      dockerfile: Dockerfile.develop
+      dockerfile: Dockerfile.base
     volumes:
       - "../.:/var/www/html"
     ports:
