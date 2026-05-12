@@ -1,7 +1,7 @@
 FROM base_image
 
 # Apache modules
-RUN a2enmod rewrite headers ssl
+RUN a2enmod rewrite headers
 
 # Edit the document root
 COPY utils/backend.conf /etc/apache2/sites-available/backend.conf
