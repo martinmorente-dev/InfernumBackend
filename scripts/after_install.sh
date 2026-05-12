@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Take the ssmm secret to the apps key for decryption
 APP_KEY=$(aws ssm get-parameter \
   --name "/backend/app-key" \
