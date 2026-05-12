@@ -31,13 +31,14 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
   npm install
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan migrate --force
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize:clear
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize
 
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan migrate --force
 
 docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
