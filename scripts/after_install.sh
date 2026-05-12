@@ -12,20 +12,22 @@ APP_KEY=$(aws ssm get-parameter \
 
 cd /var/www/html/public/Infernum-API/API
 
+sleep 5
+
 docker build -f setup/Dockerfile.base -t base_image .
 
 docker compose -f setup/docker-compose.prod.yml up -d --build
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel composer install --no-dev --optimize-autoloader
+docker compose -f setup/docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel php artisan env:decrypt --env=production --key="${APP_KEY}"
+docker compose -f setup/docker-compose.prod.yml exec -T app php artisan env:decrypt --env=production --key="${APP_KEY}"
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel npm install
+docker compose -f setup/docker-compose.prod.yml exec -T app npm install
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel php artisan optimize:clear
+docker compose -f setup/docker-compose.prod.yml exec -T app php artisan optimize:clear
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel php artisan optimize
+docker compose -f setup/docker-compose.prod.yml exec -T app php artisan optimize
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel php artisan migrate
+docker compose -f setup/docker-compose.prod.yml exec -T app php artisan migrate
 
-docker compose -f setup/docker-compose.prod.yml exec -T Laravel service apache2 reload
+docker compose -f setup/docker-compose.prod.yml exec -T app service apache2 reload
