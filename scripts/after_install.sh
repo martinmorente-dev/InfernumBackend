@@ -18,16 +18,23 @@ docker build -f setup/Dockerfile.base -t base_image .
 
 docker compose -f setup/docker-compose.prod.yml up -d --build
 
-docker compose -f setup/docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  composer install --no-dev --optimize-autoloader
 
-docker compose -f setup/docker-compose.prod.yml exec -T app php artisan env:decrypt --env=production --key="${APP_KEY}"
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  php artisan env:decrypt --env=production --key="${APP_KEY}"
 
-docker compose -f setup/docker-compose.prod.yml exec -T app npm install
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  npm install
 
-docker compose -f setup/docker-compose.prod.yml exec -T app php artisan optimize:clear
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  php artisan optimize:clear
 
-docker compose -f setup/docker-compose.prod.yml exec -T app php artisan optimize
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  php artisan optimize
 
-docker compose -f setup/docker-compose.prod.yml exec -T app php artisan migrate
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public app \
+  php artisan migrate --force
 
-docker compose -f setup/docker-compose.prod.yml exec -T app service apache2 reload
+docker compose -f setup/docker-compose.prod.yml exec -T app \
+  service apache2 reload
