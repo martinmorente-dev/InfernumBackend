@@ -39,6 +39,5 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize
 
-
 docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
