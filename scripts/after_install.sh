@@ -8,9 +8,9 @@ APP_KEY=$(aws ssm get-parameter \
   --output text \
   --region us-east-1)
 
-cd ~/var/www/html/public/Infernum-API
+cd home/ubuntu/var/www/html/public/Infernum-API
 
-docker build -f Dockerfile.base -t base_image
+docker build -f Dockerfile.base -t base_image .
 
 docker compose -f docker-compose.prod up -d --build
 
