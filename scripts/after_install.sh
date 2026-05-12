@@ -24,7 +24,7 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan env:decrypt --env=production --key="${APP_KEY}"
 
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/app app \
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   cp .env.production .env
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
