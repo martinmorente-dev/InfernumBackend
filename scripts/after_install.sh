@@ -23,3 +23,5 @@ docker compose exec -T Laravel npm install
 docker compose exec -T Laravel php artisan optimize:clear && docker compose exec -T Laravel php artisan optimize
 
 docker compose exec -T Laravel php artisan migrate
+
+docker compose exec -T Laravel sudo service apache2 reload

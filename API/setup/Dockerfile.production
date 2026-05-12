@@ -7,4 +7,4 @@ RUN a2enmod rewrite headers ssl
 COPY utils/backend.conf /etc/apache2/sites-available/backend.conf
 
 # Enable the correct configuration file and disable the 000-default.conf
-RUN a2dissite 000-default.conf && a2ensite backend.conf && service reload apache2
+RUN a2dissite 000-default.conf && a2ensite backend.conf
