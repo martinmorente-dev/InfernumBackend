@@ -8,20 +8,18 @@ APP_KEY=$(aws ssm get-parameter \
   --output text \
   --region us-east-1)
 
-cd ~/home/ubuntu/InfernumAPI
+cd ~/var/www/html/public/Infernum-API
 
-docker compose up -d --build
+docker build -f Dockerfile.base -t base_image
 
-sleep 5
+docker compose -f docker-compose.prod up -d --build
 
-docker compose exec -T Laravel composer install --no-dev --optimize-autoloader
+docker exec -T Laravel composer install --no-dev --optimize-autoloader
 
-docker compose exec -T Laravel php artisan env:desencrypt --env=production --key=${APP_KEY}
+dockere exec -T Laravel php artisan env:descrypt --env=production --key=${APP_KEY}
 
-docker compose exec -T Laravel npm install
+docker exec -T Laravel npm install
 
-docker compose exec -T Laravel php artisan optimize:clear && docker compose exec -T Laravel php artisan optimize
+docker exec -T Laravel php artisan optimize:clear && docker  exec -T Laravel php artisan optimize
 
-docker compose exec -T Laravel php artisan migrate
-
-docker compose exec -T Laravel php artisan serve --host 0.0.0.0
+docker exec -T Laravel php artisan migrate
