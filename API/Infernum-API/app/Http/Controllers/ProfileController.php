@@ -17,20 +17,20 @@ class ProfileController extends Controller
         operationId: 'show',
         tags: ['Profile'],
         security: [['sanctum' => []]],
-        summary: 'Obtener usuario autenticado (TOKEN OBLIGATORIO)',
-        description: '**¡SIN TOKEN = 401!**\n\n1. **POST /v1/login** → copia token\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅',
+        summary: 'Get authenticated user profile (TOKEN REQUIRED)',
+        description: '**NO TOKEN = 401!**\n\n1. **POST /v1/login** → copy token\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅',
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Usuario OK',
+                description: 'User OK',
                 content: new OA\JsonContent(ref: '#/components/schemas/UserProfileResource')
             ),
             new OA\Response(
                 response: 401,
-                description: 'TOKEN requerido',
+                description: 'TOKEN required',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'Error: No autenticado'),
+                        new OA\Property(property: 'status', type: 'string', example: 'Error: Unauthenticated'),
                     ]
                 )
             ),
@@ -64,8 +64,8 @@ class ProfileController extends Controller
         operationId: 'updateProfile',
         tags: ['Profile'],
         security: [['sanctum' => []]],
-        summary: 'Obtener usuario autenticado (TOKEN OBLIGATORIO)',
-        description: '**¡SIN TOKEN = 401!**\n\n1. **POST /v1/login** → copia token\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅',
+        summary: 'Update authenticated user profile (TOKEN REQUIRED)',
+        description: '**NO TOKEN = 401!**\n\n1. **POST /v1/login** → copy token\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅',
         requestBody: new OA\RequestBody(
             description: 'Data of the profile updated',
             required: false,
@@ -81,10 +81,10 @@ class ProfileController extends Controller
             ),
             new OA\Response(
                 response: 401,
-                description: 'TOKEN requerido',
+                description: 'TOKEN required',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'Error: No autenticado'),
+                        new OA\Property(property: 'status', type: 'string', example: 'Error: Unauthenticated'),
                     ]
                 )
             ),
@@ -104,13 +104,14 @@ class ProfileController extends Controller
     public function updateProfile(ProfileRequest $request): JsonResponse
     {
         $profile = Auth::user()->profile;
+        $data = $request->validated();
 
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
-            $path = "storage/" . $file->store('profiles_images', 'public');
+            $data['profile_picture'] = "storage/" . $file->store('profiles_images', 'public');
         }
 
-        $profile->update(array_merge($request->validated(), ['profile_picture' => $path]));
+        $profile->update($data);
 
         return response()->json([
             'status' => 'Succesful',

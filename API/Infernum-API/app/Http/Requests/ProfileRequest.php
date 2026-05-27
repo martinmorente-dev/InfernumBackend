@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     type: 'object',
     properties: [
         new OA\Property(property: 'display_name', type: 'string', example: 'manolo'),
-        new OA\Property(property: 'bio', type: 'text', example: 'Yo solo soy un jugador'),
+        new OA\Property(property: 'bio', type: 'text', example: 'I am just a player'),
         new OA\Property(property: 'profile_picture', type: 'string', example: 'https://image.webp'),
     ],
     required: ['email', 'password']

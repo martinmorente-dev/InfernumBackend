@@ -9,7 +9,7 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'BuyRequest',
     title: 'BuyRequest',
-    description: 'Request para procesar compra del carrito',
+    description: 'Request to process shopping cart purchase',
     properties: [
         new OA\Property(property: 'shoppingCartId', type: 'integer', example: 1),
     ],
@@ -48,10 +48,10 @@ class BuyRequest extends FormRequest
             ->first();
 
         if (!$shoppingCart)
-                throw ValidationException::withMessages(['shoppingCartId' => 'El carrito no pertenece al usuario']);
+                throw ValidationException::withMessages(['shoppingCartId' => 'The cart does not belong to the user']);
 
         if ($shoppingCart->cartItems->isEmpty())
-            throw ValidationException::withMessages(['shoppingCartId' => 'El carrito no tiene items.']);
+            throw ValidationException::withMessages(['shoppingCartId' => 'The cart has no items.']);
 
         $this->shoppingCart = $shoppingCart;
     }

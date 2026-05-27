@@ -25,7 +25,7 @@ class LibraryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'short_description' => $this->short_description,
-            'image' => $this->portraitImage ? new ImageResource($this->portrait) : null
+            'image' => $this->portraitImage ? new ImageResource($this->portraitImage) : null
         ];
     }
 }

@@ -41,70 +41,70 @@ class GenresSeeder extends Seeder
             ],
             [
                 'type' => 'Ciencia ficción'
-            ],
+            ],     
             [
                 'type' => 'Cyberpunk'
-            ],
+            ],           
             [
                 'type' => 'Mundo abierto'
-            ],
+            ],        
             [
                 'type' => 'Turnos'
-            ],
+            ],               
             [
                 'type' => 'Simulación'
-            ],
+            ],           
             [
                 'type' => 'Granja'
-            ],
+            ],               
             [
                 'type' => 'Rogue-like'
-            ],
+            ],           
             [
                 'type' => 'FPS'
-            ],
+            ],                  
             [
                 'type' => 'Acción'
-            ],
+            ],               
             [
                 'type' => 'Deducción social'
-            ],
+            ],     
             [
                 'type' => 'Multijugador'
-            ],
+            ],         
             [
                 'type' => 'Crimen'
-            ],
+            ],               
             [
                 'type' => 'Western'
-            ],
+            ],              
             [
                 'type' => 'Aventura'
-            ],
+            ],             
             [
                 'type' => 'Mitología'
-            ],
+            ],            
             [
                 'type' => 'Puzles'
-            ],
+            ],               
             [
                 'type' => 'Narrativa'
-            ],
+            ],            
             [
                 'type' => 'Plataformas'
-            ],
+            ],          
             [
                 'type' => 'Metroidvania'
-            ],
+            ],         
             [
                 'type' => 'Superhéroes'
-            ],
+            ],          
             [
                 'type' => 'Sigilo'
-            ],
+            ],               
             [
                 'type' => 'Post-apocalíptico'
-            ]
+            ]     
         ]);
     }
 }

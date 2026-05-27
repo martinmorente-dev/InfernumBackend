@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'ShoppingCartResource',
     title: 'ShoppingCartResource',
-    description: 'Recurso del carrito de compras',
+    description: 'Shopping cart resource',
     properties: [
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'items', ref: '#components/schemas/CartItemsResource')

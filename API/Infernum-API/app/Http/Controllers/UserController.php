@@ -18,7 +18,7 @@ class UserController extends Controller
         path: '/v1/login',
         operationId: 'loginUser',
         tags: ['Auth'],
-        summary: 'Iniciar sesión de usuario',
+        summary: 'Log in user',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UserLoginRequest')
@@ -26,7 +26,7 @@ class UserController extends Controller
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Login exitoso',
+                description: 'Successful login',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Successfull'),
@@ -37,7 +37,7 @@ class UserController extends Controller
             ),
             new OA\Response(
                 response: 401,
-                description: 'Credenciales incorrectas',
+                description: 'Incorrect credentials',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Error: Incorrect credentials')
@@ -71,7 +71,7 @@ class UserController extends Controller
         path: '/v1/register',
         operationId: 'registerUser',
         tags: ['Auth'],
-        summary: 'Registrar nuevo usuario',
+        summary: 'Register new user',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UserRegisterRequest')
@@ -79,7 +79,7 @@ class UserController extends Controller
         responses: [
             new OA\Response(
                 response: 201,
-                description: 'Usuario creado',
+                description: 'User created',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Successfull'),
@@ -91,7 +91,7 @@ class UserController extends Controller
             ),
             new OA\Response(
                 response: 422,
-                description: 'Datos inválidos',
+                description: 'Invalid data',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Error'),
@@ -121,22 +121,22 @@ class UserController extends Controller
     #[OA\Get(
         path: '/v1/user',
         operationId: 'getAuthenticatedUser',
-        tags: ['Usuario'],
+        tags: ['User'],
         security: [['sanctum' => []]],
-        summary: 'Obtener usuario autenticado (TOKEN OBLIGATORIO)',
-        description: '**¡SIN TOKEN = 401!**\n\n1. **POST /v1/login** → copia token\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅',
+        summary: 'Get authenticated user (TOKEN REQUIRED)',
+        description: '**NO TOKEN = 401!**\n\n1. **POST /v1/login** → copy token\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅',
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Usuario OK',
+                description: 'User OK',
                 content: new OA\JsonContent(ref: '#/components/schemas/UserResource')
             ),
             new OA\Response(
                 response: 401,
-                description: 'TOKEN requerido',
+                description: 'TOKEN required',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'Error: No autenticado')
+                        new OA\Property(property: 'status', type: 'string', example: 'Error: Unauthenticated')
                     ]
                 )
             )

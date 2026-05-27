@@ -17,12 +17,12 @@ class ShoppingCartController extends Controller
         path: '/v1/cart/show',
         operationId: 'showShoppingCart',
         tags: ['Cart'],
-        summary: 'Obtener carrito de compras',
+        summary: 'Get shopping cart',
         security: [['sanctum' => []]],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Carrito obtenido exitosamente',
+                description: 'Shopping cart successfully retrieved',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),
@@ -32,7 +32,7 @@ class ShoppingCartController extends Controller
             ),
             new OA\Response(
                 response: 404,
-                description: 'El usuario no tiene un carrito de compras',
+                description: 'The user does not have a shopping cart',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Failure: The user does not have a shopping cart')
@@ -64,7 +64,7 @@ class ShoppingCartController extends Controller
         path: '/v1/cart/create',
         operationId: 'createCartItem',
         tags: ['Cart'],
-        summary: 'Crear carrito o agregar/actualizar item',
+        summary: 'Create shopping cart or add/update item',
         security: [['sanctum' => []]],
         requestBody: new OA\RequestBody(
             required: true,
@@ -73,7 +73,7 @@ class ShoppingCartController extends Controller
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Item creado o cantidad actualizada exitosamente',
+                description: 'Item created or quantity successfully updated',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),
@@ -85,7 +85,7 @@ class ShoppingCartController extends Controller
             ),
             new OA\Response(
                 response: 422,
-                description: 'Error de validación',
+                description: 'Validation error',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'message', type: 'string', example: 'The given data was invalid.'),
@@ -110,7 +110,7 @@ class ShoppingCartController extends Controller
             ),
             new OA\Response(
                 response: 404,
-                description: 'Juego no encontrado'
+                description: 'Game not found'
             )
         ]
     )]
@@ -126,11 +126,17 @@ class ShoppingCartController extends Controller
 
         $game = Game::findOrFail($request->game_id);
 
-        if ($item)
-            return response()->json(['status' => 'Failure', 'message' => 'Ese juego ya lo agregaste']);
+        if ($item) {
+            return response()->json([
+                'status' => 'Successfull',
+                'message' => 'You already added that game',
+                'cart_id' => $cart->id,
+                'total_items' => $cart->cartItems()->count()
+            ], 200);
+        }
 
         if($user->games()->where('game_id', $request->game_id)->exists())
-            return response()->json(['status' => 'Failure', 'message' => 'Ese juego ya lo tiene en su biblioteca']);
+            return response()->json(['status' => 'Failure', 'message' => 'You already own this game in your library']);
 
         CartItems::create([
                 'shopping_cart_id' => $cart->id,

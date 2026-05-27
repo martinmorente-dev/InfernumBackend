@@ -18,8 +18,8 @@ use OpenApi\Attributes as OA;
     properties: [
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'name', type: 'string', example: 'Dark Souls'),
-        new OA\Property(property: 'short_description', type: 'string', example: 'es un aclamado juego de rol de acción (ARPG) de fantasía oscura, desarrollado por FromSoftware'),
-        new OA\Property(property: 'long_description', type: 'string', example: 'Los juegos de Dark Souls se juegan en tercera persona y se centran en explorar entornos interconectados mientras se lucha contra enemigos con armas y magia . Los jugadores luchan contra jefes para avanzar en la historia, a la vez que interactúan con personajes no jugables.'),
+        new OA\Property(property: 'short_description', type: 'string', example: 'is an acclaimed action role-playing game (ARPG) developed by FromSoftware'),
+        new OA\Property(property: 'long_description', type: 'string', example: 'Dark Souls games are played in a third-person perspective, and focus on exploring interconnected environments while fighting enemies with weapons and magic. Players fight bosses to progress through the story, while interacting with non-playable characters.'),
         new OA\Property(property: 'price', type: 'float', example: 39.99),
         new OA\Property(property: 'final_price', type: 'float', example: 20.99),
         new OA\Property(property: 'genres', ref: '#/components/schemas/GenreResource'),

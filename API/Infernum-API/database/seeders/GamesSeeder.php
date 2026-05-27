@@ -199,24 +199,24 @@ class GamesSeeder extends Seeder
 
         $game1->genres()->attach([1,2,3,4]);
         $game2->genres()->attach([5,6,7,8]);
-        $game3->genres()->attach([3, 8, 9, 10]);
-        $game4->genres()->attach([3, 11, 24]);
-        $game5->genres()->attach([12, 13]);
-        $game6->genres()->attach([3, 14]);
-        $game7->genres()->attach([3, 2, 10]);
-        $game8->genres()->attach([15, 16]);
-        $game9->genres()->attach([17, 18]);
-        $game10->genres()->attach([10, 16, 19]);
-        $game11->genres()->attach([10, 20, 21]);
-        $game12->genres()->attach([16, 22]);
-        $game13->genres()->attach([23, 8]);
-        $game14->genres()->attach([15, 24]);
-        $game15->genres()->attach([25, 24]);
-        $game16->genres()->attach([26, 16]);
-        $game17->genres()->attach([3, 24]);
-        $game18->genres()->attach([27, 16]);
-        $game19->genres()->attach([28, 16]);
-        $game20->genres()->attach([29, 3]);
+        $game3->genres()->attach([3, 8, 9, 10]);  
+        $game4->genres()->attach([3, 11, 24]);    
+        $game5->genres()->attach([12, 13]);       
+        $game6->genres()->attach([3, 14]);        
+        $game7->genres()->attach([3, 2, 10]);     
+        $game8->genres()->attach([15, 16]);       
+        $game9->genres()->attach([17, 18]);       
+        $game10->genres()->attach([10, 16, 19]);  
+        $game11->genres()->attach([10, 20, 21]);  
+        $game12->genres()->attach([16, 22]);      
+        $game13->genres()->attach([23, 8]);       
+        $game14->genres()->attach([15, 24]);      
+        $game15->genres()->attach([25, 24]);      
+        $game16->genres()->attach([26, 16]);      
+        $game17->genres()->attach([3, 24]);       
+        $game18->genres()->attach([27, 16]);      
+        $game19->genres()->attach([28, 16]);      
+        $game20->genres()->attach([29, 3]);       
         }
 
 

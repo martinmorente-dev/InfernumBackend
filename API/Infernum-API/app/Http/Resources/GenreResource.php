@@ -14,7 +14,7 @@ class GenreResource extends JsonResource
         type: 'object',
         properties: [
             new OA\Property(property: 'id', type: 'integer', example: 1),
-            new OA\Property(property: 'type', type: 'string', example: 'Accion')
+            new OA\Property(property: 'type', type: 'string', example: 'Action')
         ]
     )]
     public function toArray(Request $request): array

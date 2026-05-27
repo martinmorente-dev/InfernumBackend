@@ -34,9 +34,9 @@ class UserLoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Tienes que introducir el email',
-            'email.email' => 'El email introducido no es valido',
-            'password.required' => 'Tienes que introducir la contraseña'
+            'email.required' => 'You must enter an email address',
+            'email.email' => 'The entered email is not valid',
+            'password.required' => 'You must enter a password'
         ];
     }
 

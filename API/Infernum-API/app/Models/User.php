@@ -13,10 +13,16 @@ use App\Models\ShoppingCart;
 use App\Models\Game;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Cashier\Billable;
+use Filament\Models\Contracts\HasName;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasName
 {
     use HasFactory, HasApiTokens, Billable;
+
+    public function getFilamentName(): string
+    {
+        return $this->nickname;
+    }
 
     protected $table = 'users';
 

@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             {
                 return response()->json([
                     'status' => 'Failure',
-                    'message' => 'No tienes permisos para realizar esta acción.',
+                    'message' => 'You do not have permission to perform this action.',
                 ], 403);
             }
         });

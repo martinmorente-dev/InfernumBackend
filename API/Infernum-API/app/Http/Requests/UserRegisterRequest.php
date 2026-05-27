@@ -38,12 +38,12 @@ class UserRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Tienes que especificar un email',
-            'email.email' => 'Tienes que introducir un correo valido',
-            'email.unique' => 'Este correo ya fue registrado',
-            'nickname.required' => 'Tienes que especificar un nickname',
-            'nickname.unique' => 'Este nickname ya esta escogido',
-            'password.required' => 'Tienes que introducir tu contraseña'
+            'email.required' => 'You must specify an email address',
+            'email.email' => 'You must enter a valid email address',
+            'email.unique' => 'This email is already registered',
+            'nickname.required' => 'You must specify a nickname',
+            'nickname.unique' => 'This nickname is already taken',
+            'password.required' => 'You must enter a password'
         ];
     }
 

@@ -19,7 +19,7 @@ class GameController extends Controller
         path: '/v1/games/details/{id}',
         operationId: 'details',
         tags: ['Game'],
-        summary: 'Obtener juego',
+        summary: 'Get game details',
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -31,7 +31,7 @@ class GameController extends Controller
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Juego obtenido',
+                description: 'Game retrieved',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),
@@ -41,7 +41,7 @@ class GameController extends Controller
             ),
             new OA\Response(
                 response: 404,
-                description: 'Juego no encontrado'
+                description: 'Game not found'
             )
         ]
     )]
@@ -62,7 +62,7 @@ class GameController extends Controller
         path: '/v1/games/all/{pagination}',
         operationId: 'all',
         tags: ['Game'],
-        summary: 'Obtener juego',
+        summary: 'Get all games',
         parameters: [
             new OA\Parameter(
                 name: 'pagination',
@@ -74,7 +74,7 @@ class GameController extends Controller
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Juegos obtenidos',
+                description: 'Games retrieved',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),
@@ -124,34 +124,34 @@ class GameController extends Controller
         path: '/v1/games/filter',
         operationId: 'filterGame',
         tags: ['Game'],
-        summary: 'Filtrar juegos',
+        summary: 'Filter games',
         parameters: [
             new OA\Parameter(
                 name: 'price[gt]',
                 in: 'query',
                 required: false,
-                description: 'Precio minimo (mayor que)',
+                description: 'Minimum price (greater than)',
                 schema: new OA\Schema(type: 'number', example: 10)
             ),
             new OA\Parameter(
                 name: 'genre',
                 in: 'query',
                 required: false,
-                description: 'Juego que coincida con el genero',
-                schema: new OA\Schema(type: 'string', example: 'Rol')
+                description: 'Game matching the genre',
+                schema: new OA\Schema(type: 'string', example: 'RPG')
             ),
             new OA\Parameter(
                 name: 'name',
                 in: 'query',
                 required: false,
-                description: 'Juego que tenga un nombre parecido al introducido',
+                description: 'Game with a name similar to the query',
                 schema: new OA\Schema(type: 'string', example: 'Dark')
             )
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Juegos obtenidos',
+                description: 'Games retrieved',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),
@@ -218,11 +218,11 @@ class GameController extends Controller
         path: '/v1/games/most-bought',
         operationId: 'gameMostBought',
         tags: ['Game'],
-        summary: 'Juego mas comprado',
+        summary: 'Most purchased game',
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Juego obtenido',
+                description: 'Game retrieved',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'Succesfull'),

@@ -11,14 +11,14 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'CreateShoppingCartRequest',
     title: 'CreateShoppingCartRequest',
-    description: 'Solicitud para crear o agregar item al carrito',
+    description: 'Request to create or add item to shopping cart',
     type: 'object',
     properties: [
         new OA\Property(
             property: 'game_id',
             type: 'integer',
             example: 1,
-            description: 'ID del juego (debe existir en la tabla games)'
+            description: 'Game ID (must exist in games table)'
         )
     ],
     required: ['game_id']

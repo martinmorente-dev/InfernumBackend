@@ -17,7 +17,7 @@
                 "tags": [
                     "Game"
                 ],
-                "summary": "Obtener juego",
+                "summary": "Get game details",
                 "operationId": "details",
                 "parameters": [
                     {
@@ -32,7 +32,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Juego obtenido",
+                        "description": "Game retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -51,7 +51,7 @@
                         }
                     },
                     "404": {
-                        "description": "Juego no encontrado"
+                        "description": "Game not found"
                     }
                 }
             }
@@ -61,7 +61,7 @@
                 "tags": [
                     "Game"
                 ],
-                "summary": "Obtener juego",
+                "summary": "Get all games",
                 "operationId": "all",
                 "parameters": [
                     {
@@ -76,7 +76,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Juegos obtenidos",
+                        "description": "Games retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -143,13 +143,13 @@
                 "tags": [
                     "Game"
                 ],
-                "summary": "Filtrar juegos",
+                "summary": "Filter games",
                 "operationId": "filterGame",
                 "parameters": [
                     {
                         "name": "price[gt]",
                         "in": "query",
-                        "description": "Precio minimo (mayor que)",
+                        "description": "Minimum price (greater than)",
                         "required": false,
                         "schema": {
                             "type": "number",
@@ -159,17 +159,17 @@
                     {
                         "name": "genre",
                         "in": "query",
-                        "description": "Juego que coincida con el genero",
+                        "description": "Game matching the genre",
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "example": "Rol"
+                            "example": "RPG"
                         }
                     },
                     {
                         "name": "name",
                         "in": "query",
-                        "description": "Juego que tenga un nombre parecido al introducido",
+                        "description": "Game with a name similar to the query",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -179,7 +179,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Juegos obtenidos",
+                        "description": "Games retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -249,11 +249,11 @@
                 "tags": [
                     "Game"
                 ],
-                "summary": "Juego mas comprado",
+                "summary": "Most purchased game",
                 "operationId": "gameMostBought",
                 "responses": {
                     "200": {
-                        "description": "Juego obtenido",
+                        "description": "Game retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -282,12 +282,12 @@
                 "tags": [
                     "Library"
                 ],
-                "summary": "Obtener libreria",
-                "description": "⚠️ Requiere autenticación. Incluye el token Bearer en el header: `Authorization: Bearer {token}`",
+                "summary": "Get library",
+                "description": "⚠️ Requires authentication. Include the Bearer token in the header: `Authorization: Bearer {token}`",
                 "operationId": "Show Library",
                 "responses": {
                     "200": {
-                        "description": "Librería obtenida",
+                        "description": "Library retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -298,7 +298,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Biblioteca vacia",
+                                            "example": "Library is empty",
                                             "nullable": true
                                         },
                                         "games": {
@@ -315,7 +315,7 @@
                         }
                     },
                     "401": {
-                        "description": "No autenticado - Debes incluir el token Bearer en el header: Authorization: Bearer {token}",
+                        "description": "Unauthenticated - You must include the Bearer token in the header: Authorization: Bearer {token}",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -343,8 +343,8 @@
                 "tags": [
                     "Payment"
                 ],
-                "summary": "Procesar compra del carrito (TOKEN OBLIGATORIO)",
-                "description": "**¡SIN TOKEN = 401!**\\n\\n1. **POST /v1/login** → copia token\\n2. **Authorize** → pega `Bearer {token}` en el candado\\n3. **Ejecuta esta ruta** → Redirige a **Stripe Checkout** ✅\\n\\n**Validaciones:**\\n- **shoppingCartId**: Obligatorio, entero, debe existir en `shopping_carts`\\n- Carrito debe pertenecer al **usuario autenticado**\\n- Carrito **NO debe estar vacío**\\n\\n**Flujo:**\\n1. Valida carrito y carga items con juegos\\n2. Crea **sesión Stripe Checkout** (modo `payment`)\\n3. Genera **line_items** dinámicos desde `cartItems`\\n4. Retorna **URL de Stripe** para redirección",
+                "summary": "Process cart purchase (TOKEN REQUIRED)",
+                "description": "**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`\\n3. **Execute this route** → Redirects to **Stripe Checkout** ✅\\n\\n**Validations:**\\n- **shoppingCartId**: Required, integer, must exist in `shopping_carts`\\n- Shopping cart must belong to the **authenticated user**\\n- Shopping cart **MUST NOT be empty**\\n\\n**Flow:**\\n1. Validate cart and load items with games\\n2. Create **Stripe Checkout session** (mode `payment`)\\n3. Generate dynamic **line_items** from `cartItems`\\n4. Return **Stripe URL** for redirection",
                 "operationId": "buy",
                 "requestBody": {
                     "required": true,
@@ -356,7 +356,7 @@
                                 ],
                                 "properties": {
                                     "shoppingCartId": {
-                                        "description": "ID del carrito de compras del usuario autenticado",
+                                        "description": "ID of the shopping cart of the authenticated user",
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -368,7 +368,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Sesión Stripe Checkout creada exitosamente",
+                        "description": "Stripe Checkout session successfully created",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -388,14 +388,14 @@
                         }
                     },
                     "401": {
-                        "description": "TOKEN requerido",
+                        "description": "TOKEN required",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "Error: No autenticado"
+                                            "example": "Error: Unauthenticated"
                                         }
                                     },
                                     "type": "object"
@@ -404,7 +404,7 @@
                         }
                     },
                     "400": {
-                        "description": "Error de validación",
+                        "description": "Validation Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -415,7 +415,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "El carrito no pertenece al usuario"
+                                            "example": "The cart does not belong to the user"
                                         },
                                         "error": {
                                             "type": "string",
@@ -428,7 +428,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validación fallida - shoppingCartId inválido",
+                        "description": "Validation failed - invalid shoppingCartId",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -459,12 +459,12 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Obtener usuario autenticado (TOKEN OBLIGATORIO)",
-                "description": "**¡SIN TOKEN = 401!**\\n\\n1. **POST /v1/login** → copia token\\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅",
+                "summary": "Get authenticated user profile (TOKEN REQUIRED)",
+                "description": "**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅",
                 "operationId": "show",
                 "responses": {
                     "200": {
-                        "description": "Usuario OK",
+                        "description": "User OK",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -474,14 +474,14 @@
                         }
                     },
                     "401": {
-                        "description": "TOKEN requerido",
+                        "description": "TOKEN required",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "Error: No autenticado"
+                                            "example": "Error: Unauthenticated"
                                         }
                                     },
                                     "type": "object"
@@ -526,8 +526,8 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Obtener usuario autenticado (TOKEN OBLIGATORIO)",
-                "description": "**¡SIN TOKEN = 401!**\\n\\n1. **POST /v1/login** → copia token\\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅",
+                "summary": "Update authenticated user profile (TOKEN REQUIRED)",
+                "description": "**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅",
                 "operationId": "updateProfile",
                 "requestBody": {
                     "description": "Data of the profile updated",
@@ -552,14 +552,14 @@
                         }
                     },
                     "401": {
-                        "description": "TOKEN requerido",
+                        "description": "TOKEN required",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "Error: No autenticado"
+                                            "example": "Error: Unauthenticated"
                                         }
                                     },
                                     "type": "object"
@@ -604,11 +604,11 @@
                 "tags": [
                     "Cart"
                 ],
-                "summary": "Obtener carrito de compras",
+                "summary": "Get shopping cart",
                 "operationId": "showShoppingCart",
                 "responses": {
                     "200": {
-                        "description": "Carrito obtenido exitosamente",
+                        "description": "Shopping cart successfully retrieved",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -627,7 +627,7 @@
                         }
                     },
                     "404": {
-                        "description": "El usuario no tiene un carrito de compras",
+                        "description": "The user does not have a shopping cart",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -655,7 +655,7 @@
                 "tags": [
                     "Cart"
                 ],
-                "summary": "Crear carrito o agregar/actualizar item",
+                "summary": "Create shopping cart or add/update item",
                 "operationId": "createCartItem",
                 "requestBody": {
                     "required": true,
@@ -669,7 +669,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Item creado o cantidad actualizada exitosamente",
+                        "description": "Item created or quantity successfully updated",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -701,7 +701,7 @@
                         }
                     },
                     "422": {
-                        "description": "Error de validación",
+                        "description": "Validation error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -736,7 +736,7 @@
                         }
                     },
                     "404": {
-                        "description": "Juego no encontrado"
+                        "description": "Game not found"
                     }
                 },
                 "security": [
@@ -751,7 +751,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Iniciar sesión de usuario",
+                "summary": "Log in user",
                 "operationId": "loginUser",
                 "requestBody": {
                     "required": true,
@@ -765,7 +765,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login exitoso",
+                        "description": "Successful login",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -788,7 +788,7 @@
                         }
                     },
                     "401": {
-                        "description": "Credenciales incorrectas",
+                        "description": "Incorrect credentials",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -811,7 +811,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Registrar nuevo usuario",
+                "summary": "Register new user",
                 "operationId": "registerUser",
                 "requestBody": {
                     "required": true,
@@ -825,7 +825,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Usuario creado",
+                        "description": "User created",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -852,7 +852,7 @@
                         }
                     },
                     "422": {
-                        "description": "Datos inválidos",
+                        "description": "Invalid data",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -880,14 +880,14 @@
         "/v1/user": {
             "get": {
                 "tags": [
-                    "Usuario"
+                    "User"
                 ],
-                "summary": "Obtener usuario autenticado (TOKEN OBLIGATORIO)",
-                "description": "**¡SIN TOKEN = 401!**\\n\\n1. **POST /v1/login** → copia token\\n2. **Authorize** → pega `Bearer {token} en el candado`. **Ejecuta esta ruta** ✅",
+                "summary": "Get authenticated user (TOKEN REQUIRED)",
+                "description": "**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`. **Execute this route** ✅",
                 "operationId": "getAuthenticatedUser",
                 "responses": {
                     "200": {
-                        "description": "Usuario OK",
+                        "description": "User OK",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -897,14 +897,14 @@
                         }
                     },
                     "401": {
-                        "description": "TOKEN requerido",
+                        "description": "TOKEN required",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "Error: No autenticado"
+                                            "example": "Error: Unauthenticated"
                                         }
                                     },
                                     "type": "object"
@@ -925,7 +925,7 @@
         "schemas": {
             "BuyRequest": {
                 "title": "BuyRequest",
-                "description": "Request para procesar compra del carrito",
+                "description": "Request to process shopping cart purchase",
                 "required": [
                     "shoppingCartId"
                 ],
@@ -939,13 +939,13 @@
             },
             "CreateShoppingCartRequest": {
                 "title": "CreateShoppingCartRequest",
-                "description": "Solicitud para crear o agregar item al carrito",
+                "description": "Request to create or add item to shopping cart",
                 "required": [
                     "game_id"
                 ],
                 "properties": {
                     "game_id": {
-                        "description": "ID del juego (debe existir en la tabla games)",
+                        "description": "Game ID (must exist in games table)",
                         "type": "integer",
                         "example": 1
                     }
@@ -964,7 +964,7 @@
                     },
                     "bio": {
                         "type": "text",
-                        "example": "Yo solo soy un jugador"
+                        "example": "I am just a player"
                     },
                     "profile_picture": {
                         "type": "string",
@@ -1016,7 +1016,7 @@
             },
             "CartItemsResource": {
                 "title": "CartItemsResource",
-                "description": "Recurso de item del carrito",
+                "description": "Cart item resource",
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -1024,11 +1024,11 @@
                     },
                     "name": {
                         "type": "string",
-                        "example": "Juego de ejemplo"
+                        "example": "Example game"
                     },
                     "short_description": {
                         "type": "string",
-                        "example": "Descripción corta del juego"
+                        "example": "Short description of the game"
                     },
                     "image_url": {
                         "type": "string",
@@ -1076,7 +1076,7 @@
                     },
                     "short_description": {
                         "type": "string",
-                        "example": "es un aclamado juego de rol de acción (ARPG) de fantasía oscura, desarrollado por FromSoftware"
+                        "example": "is an acclaimed action role-playing game (ARPG) developed by FromSoftware"
                     },
                     "price": {
                         "type": "number",
@@ -1112,11 +1112,11 @@
                     },
                     "short_description": {
                         "type": "string",
-                        "example": "es un aclamado juego de rol de acción (ARPG) de fantasía oscura, desarrollado por FromSoftware"
+                        "example": "is an acclaimed action role-playing game (ARPG) developed by FromSoftware"
                     },
                     "long_description": {
                         "type": "string",
-                        "example": "Los juegos de Dark Souls se juegan en tercera persona y se centran en explorar entornos interconectados mientras se lucha contra enemigos con armas y magia . Los jugadores luchan contra jefes para avanzar en la historia, a la vez que interactúan con personajes no jugables."
+                        "example": "Dark Souls games are played in a third-person perspective, and focus on exploring interconnected environments while fighting enemies with weapons and magic. Players fight bosses to progress through the story, while interacting with non-playable characters."
                     },
                     "price": {
                         "type": "number",
@@ -1151,7 +1151,7 @@
                     },
                     "type": {
                         "type": "string",
-                        "example": "Accion"
+                        "example": "Action"
                     }
                 },
                 "type": "object"
@@ -1245,7 +1245,7 @@
             },
             "ShoppingCartResource": {
                 "title": "ShoppingCartResource",
-                "description": "Recurso del carrito de compras",
+                "description": "Shopping cart resource",
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -1328,8 +1328,8 @@
             "description": "Auth"
         },
         {
-            "name": "Usuario",
-            "description": "Usuario"
+            "name": "User",
+            "description": "User"
         }
     ],
     "security": [
