@@ -27,6 +27,12 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
   cp .env.production .env
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan config:clear
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan cache:clear
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan key:generate --force
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
@@ -54,15 +60,6 @@ if [ "$USER_COUNT" -eq "0" ] 2>/dev/null; then
 else
   echo "Ya hay datos, omitiendo seeders"
 fi
-
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan config:clear
-
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan cache:clear
-
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan optimize:clear
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize
