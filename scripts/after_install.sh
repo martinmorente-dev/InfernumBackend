@@ -43,8 +43,17 @@ echo "MySQL listo"
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan migrate --force
 
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan db:seed --force
+# Seedear solo si no hay usuarios
+USER_COUNT=$(docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan tinker --execute="echo App\Models\User::count();" 2>/dev/null | tr -d '[:space:]')
+
+if [ "$USER_COUNT" -eq "0" ] 2>/dev/null; then
+  echo "Base de datos vacía, ejecutando seeders..."
+  docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+    php artisan db:seed --force
+else
+  echo "Ya hay datos, omitiendo seeders"
+fi
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan config:clear

@@ -12,7 +12,7 @@ class DiscountSeeder extends Seeder
      */
     public function run(): void
     {
-        Discount::updateOrCreate([
+        Discount::insert([
             [
                 'name' => 'Descuentos Verano',
                 'percentage' => '20',
