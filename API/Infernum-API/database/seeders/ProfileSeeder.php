@@ -13,7 +13,7 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        Profile::create([
+        Profile::updateOrCreate([
             'display_name' => 'admin',
             'bio' => 'Soy un admin',
             'profile_picture' => 'https://i.pinimg.com/736x/6a/44/f0/6a44f0e35b10e6ed063eeebf7ed844f9.jpg',

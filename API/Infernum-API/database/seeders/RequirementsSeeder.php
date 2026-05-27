@@ -13,7 +13,7 @@ class RequirementsSeeder extends Seeder
      */
     public function run(): void
     {
-        Requirement::insert([
+        Requirement::updateOrCreate([
             [
                 'type' => 'minimum',
                 'os' => 'Windows 7 64-bit, Service Pack 1',
