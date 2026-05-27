@@ -27,12 +27,6 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
   cp .env.production .env
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan config:clear
-
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan cache:clear
-
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan key:generate --force
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
@@ -61,8 +55,20 @@ else
   echo "Ya hay datos, omitiendo seeders"
 fi
 
-docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan optimize
+sudo systemctl enable docker
+
+# Limpiar cache viejo y regenerar con la APP_KEY correcta
+docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html/public/Infernum-API app \
+  rm -rf bootstrap/cache/*.php
+
+docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html/public/Infernum-API app \
+  chown -R www-data:www-data bootstrap/cache storage
+
+docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
+  php artisan config:cache
+
+docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
+  php artisan route:cache
 
 docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload

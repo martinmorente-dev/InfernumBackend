@@ -1,6 +1,7 @@
 services:
   app:
     container_name: Laravel
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.production
@@ -14,6 +15,7 @@ services:
   db:
     image: docker.io/library/mysql:8.0
     container_name: mysql
+    restart: unless-stopped
     ports:
       - "1607:3306"
     environment:
