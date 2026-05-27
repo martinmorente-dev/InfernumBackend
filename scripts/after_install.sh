@@ -1,8 +1,7 @@
 #!/bin/bash
-
 set -e
 
-# Take the ssmm secret to the apps key for decryption
+# Take the ssm secret to the apps key for decryption
 APP_KEY=$(aws ssm get-parameter \
   --name "/backend/app-key" \
   --with-decryption \
@@ -33,11 +32,25 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   npm install
 
+# Esperar a que MySQL esté listo
+echo "Esperando a MySQL..."
+until docker exec mysql mysqladmin ping -h localhost --silent; do
+  echo "MySQL no está listo, esperando..."
+  sleep 5
+done
+echo "MySQL listo"
+
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan migrate --force
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan db:seed --force
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan config:clear
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan cache:clear
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize:clear
