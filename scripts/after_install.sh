@@ -70,5 +70,8 @@ docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan route:cache
 
+docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
+  php artisan config:clear
+
 docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
