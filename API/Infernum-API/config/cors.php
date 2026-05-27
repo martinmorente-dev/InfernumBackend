@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://infernum-original.duckdns.org'
+        'https://frontend-infernum-original.duckdns.org'
     ],
 
     'allowed_origins_patterns' => [],
