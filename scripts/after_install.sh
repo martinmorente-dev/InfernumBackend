@@ -37,6 +37,9 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
   php artisan migrate --force
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan db:seed --force
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan optimize:clear
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
