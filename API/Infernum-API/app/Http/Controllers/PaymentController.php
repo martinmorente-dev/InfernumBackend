@@ -83,13 +83,22 @@ class PaymentController extends Controller
 
         foreach ($cartItems as $item)
         {
+            $game = $item->game;
+            $price = $game->price;
+            
+            // Apply active discount if available
+            $activeDiscount = $game->discounts()->active()->first();
+            if ($activeDiscount) {
+                $price = $price * (1 - $activeDiscount->percentage / 100);
+            }
+
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => $item->game->name
+                        'name' => $game->name
                     ],
-                    'unit_amount' => $item->game->price * 100
+                    'unit_amount' => (int) round($price * 100)
                 ],
                 'quantity' => 1
             ];
@@ -103,9 +112,10 @@ class PaymentController extends Controller
         try {
             $session = Cashier::stripe()->checkout->sessions->create([
                 'mode' => 'payment',
+                'customer_email' => Auth::user()->email,
                 'line_items' => $lineItems,
-                'success_url' => 'http://localhost:4220/profile?payment=success',
-                'cancel_url' => 'http://localhost:4220/store?payment=cancel',
+                'success_url' => 'https://frontend-infernum-original.duckdns.org/profile?payment=success',
+                'cancel_url' => 'https://frontend-infernum-original.duckdns.org/store?payment=cancel',
                 'metadata' => [
                     'user_id' => Auth::user()->id
                 ]
