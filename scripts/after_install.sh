@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Take the ssm secret to the apps key for decryption
+# Obtener APP_KEY desde SSM
 APP_KEY=$(aws ssm get-parameter \
   --name "/backend/app-key" \
   --with-decryption \
@@ -11,26 +11,30 @@ APP_KEY=$(aws ssm get-parameter \
 
 cd /var/www/html/public/Infernum-API/API
 
-sleep 5
-
+# Construir imagen base y levantar contenedores
 docker build -f setup/Dockerfile.base -t base_image .
-
 docker compose -f setup/docker-compose.prod.yml up -d --build
 
+# Instalar dependencias
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   composer install --no-dev --optimize-autoloader
 
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  npm install
+
+# Desencriptar y preparar .env
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan env:decrypt --env=production --key="${APP_KEY}"
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   cp .env.production .env
 
+# Limpiar cache antes de migrar
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  php artisan key:generate --force
+  php artisan config:clear
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
-  npm install
+  php artisan cache:clear
 
 # Esperar a que MySQL esté listo
 echo "Esperando a MySQL..."
@@ -40,6 +44,7 @@ until docker exec mysql mysqladmin ping -h localhost --silent; do
 done
 echo "MySQL listo"
 
+# Migrar base de datos
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   php artisan migrate --force
 
@@ -55,23 +60,24 @@ else
   echo "Ya hay datos, omitiendo seeders"
 fi
 
-sudo systemctl enable docker
-
-# Limpiar cache viejo y regenerar con la APP_KEY correcta
+# Permisos correctos
 docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html/public/Infernum-API app \
   rm -rf bootstrap/cache/*.php
 
 docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html/public/Infernum-API app \
   chown -R www-data:www-data bootstrap/cache storage
 
+# Cachear configuración y rutas
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan config:cache
 
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan route:cache
 
-docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
-  php artisan config:clear
+# Habilitar Docker al inicio y recargar Apache
+sudo systemctl enable docker
 
 docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
+
+echo "Deploy completado exitosamente."
