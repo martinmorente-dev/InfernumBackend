@@ -621,7 +621,7 @@ class ImageGameSeeder extends Seeder
                 'game_id' => 18
             ],
             [
-                'url' => 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817070/ss_ad14a7daa190cb150fbb070afc70bc64d66a5e2e.1920x1080.jpg?t=1763569047',
+                'url' => 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2208920/header.jpg?t=1754572990',
                 'type' => 'portrait',
                 'game_id' => 19
             ],
