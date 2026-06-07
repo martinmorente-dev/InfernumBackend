@@ -80,15 +80,6 @@ docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan route:cache
 
-docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
-  php artisan storage:link
-
-docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
-  chmod -R 775 storage/app/public/profiles_images
-
-docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
-  chown -R www-data:www-data storage/app/public/profiles_images
-
 # Habilitar Docker al inicio y recargar Apache
 sudo systemctl enable docker
 
