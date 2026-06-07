@@ -27,6 +27,9 @@ docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/
   php artisan env:decrypt --env=production --key="${APP_KEY}"
 
 docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
+  php artisan key:generate
+
+docker compose -f setup/docker-compose.prod.yml exec -T -w /var/www/html/public/Infernum-API app \
   cp .env.production .env
 
 # Limpiar cache antes de migrar
@@ -81,3 +84,4 @@ docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
 
 echo "Deploy completado exitosamente."
+
