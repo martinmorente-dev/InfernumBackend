@@ -61,8 +61,18 @@ class UserController extends Controller
         } else {
             $token = $user->createToken('admin', ['admin', 'buy', 'cart', 'library', 'view-profile'], now()->addHour(3))->plainTextToken;
             
+            $frontendUrl = env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
+            $parsed = parse_url($frontendUrl);
+            $scheme = $parsed['scheme'] ?? 'https';
+            $host = $parsed['host'] ?? 'frontend-infernum-original.duckdns.org';
+            
+            $rootUrl = "$scheme://$host";
+            if ($host === 'localhost' || $host === '127.0.0.1') {
+                $rootUrl = 'http://localhost';
+            }
+            
             $originalUrl = url()->current();
-            URL::forceRootUrl(config('app.url'));
+            URL::forceRootUrl($rootUrl);
             
             $adminRedirectUrl = URL::temporarySignedRoute(
                 'admin.autologin',
