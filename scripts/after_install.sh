@@ -74,9 +74,6 @@ docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan config:clear
 
-docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
-  php artisan livewire:publish --assets --ansi
-
 # Habilitar Docker al inicio y recargar Apache
 sudo systemctl enable docker
 
