@@ -37,7 +37,7 @@ class ProfileRequest extends FormRequest
         return [
             'display_name' => 'nullable|string|max:255',
             'bio' => 'nullable|string|max:65535',
-            'profile_picture' => 'nullable|image|max:2048|mimes:jpeg,png,jpg,webp'
+            'profile_picture' => 'nullable|file|max:2048'
         ];
     }
 

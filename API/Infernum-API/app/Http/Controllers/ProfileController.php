@@ -103,11 +103,24 @@ class ProfileController extends Controller
     )]
     public function updateProfile(ProfileRequest $request): JsonResponse
     {
-        $profile = Auth::user()->profile;
+        $user = Auth::user();
+        $profile = $user->profile;
+        
+        if (!$profile) {
+            $profile = $user->profile()->create();
+        }
+
         $data = $request->validated();
 
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return response()->json([
+                    'status' => 'Error',
+                    'errors' => ['profile_picture' => ['The profile picture must be an image (jpg, jpeg, png, gif, webp).']]
+                ], 422);
+            }
             $data['profile_picture'] = "storage/" . $file->store('profiles_images', 'public');
         }
 
