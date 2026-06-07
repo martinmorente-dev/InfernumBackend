@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
 
 class GenresTable
@@ -16,7 +15,7 @@ class GenresTable
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('type')->searchable()->sortable(),
+                TextColumn::make('type')->searchable()->sortable()->label('Genre'),
             ])
             ->filters([
                 //
@@ -28,6 +27,9 @@ class GenresTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([10, 25, 50])
+            ->defaultPaginationPageOption(10)
+            ->searchable();
     }
 }

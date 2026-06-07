@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Discounts\Pages;
 
 use App\Filament\Resources\Discounts\DiscountResource;
-use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDiscount extends EditRecord
@@ -13,7 +12,7 @@ class EditDiscount extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            // Delete removed: discounts cannot be deleted from admin panel
         ];
     }
 }

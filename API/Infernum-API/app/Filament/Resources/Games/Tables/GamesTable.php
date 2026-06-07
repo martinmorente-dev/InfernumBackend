@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
 
 class GamesTable
@@ -19,7 +18,7 @@ class GamesTable
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('short_description')->limit(50)->tooltip(fn (TextColumn $column): ?string => $column->getState()),
                 TextColumn::make('price')->money('EUR')->sortable(),
-                TextColumn::make('count_boughts')->numeric(decimalPlaces: 0)->sortable(),
+                TextColumn::make('count_boughts')->numeric(decimalPlaces: 0)->sortable()->label('Sales'),
                 TextColumn::make('discounts.name')->label('Discount')->sortable(),
             ])
             ->filters([
@@ -32,6 +31,9 @@ class GamesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated([10, 25, 50])
+            ->defaultPaginationPageOption(10)
+            ->searchable();
     }
 }

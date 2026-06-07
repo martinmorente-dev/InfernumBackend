@@ -2,11 +2,8 @@
 
 namespace App\Filament\Resources\Discounts\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
 
 class DiscountsTable
@@ -28,9 +25,10 @@ class DiscountsTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+                // No bulk delete for discounts
+            ])
+            ->paginated([10, 25, 50])
+            ->defaultPaginationPageOption(10)
+            ->searchable();
     }
 }

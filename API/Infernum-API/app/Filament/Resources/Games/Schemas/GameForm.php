@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Games\Schemas;
 
 use Filament\Schemas\Schema;
-
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
@@ -26,14 +25,11 @@ class GameForm
                 TextInput::make('price')
                     ->numeric()
                     ->required(),
-                TextInput::make('count_boughts')
-                    ->numeric()
-                    ->default(0)
-                    ->required(),
                 Select::make('discounts_id')
                     ->relationship('discounts', 'name')
+                    ->label('Discount')
                     ->nullable(),
-                
+
                 Repeater::make('images')
                     ->relationship('images')
                     ->schema([
@@ -49,7 +45,6 @@ class GameForm
                             ->required(),
                     ])
                     ->label('Game Images')
-                    ->collapsible()
                     ->defaultItems(1),
 
                 Repeater::make('requirements')
@@ -78,7 +73,6 @@ class GameForm
                             ->maxLength(20),
                     ])
                     ->label('System Requirements')
-                    ->collapsible()
                     ->grid(2),
             ]);
     }

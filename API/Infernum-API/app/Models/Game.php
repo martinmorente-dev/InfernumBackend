@@ -19,7 +19,8 @@ class Game extends Model
         'short_description',
         'long_description',
         'price',
-        'discount_id'
+        'count_boughts',
+        'discounts_id',
     ];
 
 
