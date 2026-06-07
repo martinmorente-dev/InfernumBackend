@@ -186,6 +186,6 @@ class UserController extends Controller
 
         Auth::guard('web')->login($user);
 
-        return redirect('/administratorPanel');
+        return redirect('/administratorPanel/');
     }
 }
