@@ -113,6 +113,9 @@ class PaymentController extends Controller
         $successUrl = rtrim($origin, '/') . '/profile?payment=success&checkout_id={CHECKOUT_SESSION_ID}';
         $cancelUrl = rtrim($origin, '/') . '/store?payment=cancel';
 
+        // Collect game IDs from the cart to store in Stripe metadata
+        $gameIds = $cartItems->map(fn($item) => $item->game_id)->join(',');
+
         try {
             $session = Cashier::stripe()->checkout->sessions->create([
                 'mode' => 'payment',
@@ -121,7 +124,8 @@ class PaymentController extends Controller
                 'success_url' => $successUrl,
                 'cancel_url' => $cancelUrl,
                 'metadata' => [
-                    'user_id' => Auth::user()->id
+                    'user_id' => Auth::user()->id,
+                    'game_ids' => $gameIds,
                 ]
             ]);
 
@@ -175,16 +179,27 @@ class PaymentController extends Controller
 
                 if ($userId && (int)$userId === (int)Auth::id()) {
                     $user = Auth::user();
-                    
+
+                    // PRIMARY: get game IDs from Stripe session metadata (reliable even after cart is deleted)
+                    $metaGameIds = $session->metadata->game_ids ?? null;
+                    if ($metaGameIds) {
+                        $gameIds = array_filter(array_map('intval', explode(',', $metaGameIds)));
+                    } else {
+                        // FALLBACK: try to get from the cart if still present
+                        $gameIds = $user->shoppingCart
+                            ? $user->shoppingCart->cartItems->pluck('game_id')->toArray()
+                            : [];
+                    }
+
+                    if (!empty($gameIds)) {
+                        \Illuminate\Support\Facades\Log::info('Synchronous verify payment syncing games: ' . json_encode($gameIds));
+                        $user->games()->syncWithoutDetaching($gameIds);
+                    }
+
+                    // Clean up cart if still present
                     if ($user->shoppingCart) {
-                        $gameIds = $user->shoppingCart->cartItems->pluck('game_id')->toArray();
-                        
-                        if (!empty($gameIds)) {
-                            \Illuminate\Support\Facades\Log::info('Synchronous verify payment syncing games: ' . json_encode($gameIds));
-                            $user->games()->syncWithoutDetaching($gameIds);
-                            $user->shoppingCart->cartItems()->delete();
-                            $user->shoppingCart->delete();
-                        }
+                        $user->shoppingCart->cartItems()->delete();
+                        $user->shoppingCart->delete();
                     }
 
                     return response()->json([
