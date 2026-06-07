@@ -53,6 +53,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
 
     // Payment Routes
     Route::post('/buy', [PaymentController::class, 'buy'])->middleware(['auth:sanctum', 'refresh.token', 'abilities:buy']);
+    Route::post('/payments/verify', [PaymentController::class, 'verifyPayment'])->middleware(['auth:sanctum', 'refresh.token']);
 
     Route::post('/stripe/webhook', [WebHookController::class, 'handleWebhook']);
 });

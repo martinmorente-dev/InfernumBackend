@@ -110,7 +110,7 @@ class PaymentController extends Controller
         }
 
         $origin = $request->header('origin') ?? env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
-        $successUrl = rtrim($origin, '/') . '/profile?payment=success';
+        $successUrl = rtrim($origin, '/') . '/profile?payment=success&session_id={CHECKOUT_SESSION_ID}';
         $cancelUrl = rtrim($origin, '/') . '/store?payment=cancel';
 
         try {
@@ -149,5 +149,67 @@ class PaymentController extends Controller
             'state' => 'Success',
             'url' => rtrim($origin, '/') . '/profile?payment=success'
         ]);
+    }
+
+    public function verifyPayment(\Illuminate\Http\Request $request): JsonResponse
+    {
+        $request->validate([
+            'session_id' => 'required|string'
+        ]);
+
+        $sessionId = $request->input('session_id');
+
+        $stripeSecret = env('STRIPE_SECRET');
+        if (empty($stripeSecret) || str_contains($stripeSecret, 'tu_clave') || str_contains($stripeSecret, 'your_stripe') || str_contains($stripeSecret, '******')) {
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Payment verified (Mock Mode).'
+            ]);
+        }
+
+        try {
+            $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
+
+            if ($session->payment_status === 'paid') {
+                $userId = $session->metadata->user_id ?? null;
+
+                if ($userId && (int)$userId === (int)Auth::id()) {
+                    $user = Auth::user();
+                    
+                    if ($user->shoppingCart) {
+                        $gameIds = $user->shoppingCart->cartItems->pluck('game_id')->toArray();
+                        
+                        if (!empty($gameIds)) {
+                            \Illuminate\Support\Facades\Log::info('Synchronous verify payment syncing games: ' . json_encode($gameIds));
+                            $user->games()->syncWithoutDetaching($gameIds);
+                            $user->shoppingCart->cartItems()->delete();
+                            $user->shoppingCart->delete();
+                        }
+                    }
+
+                    return response()->json([
+                        'status' => 'Success',
+                        'message' => 'Payment verified and library updated.'
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 'Failure',
+                    'message' => 'Session does not belong to the authenticated user.'
+                ], 403);
+            }
+
+            return response()->json([
+                'status' => 'Failure',
+                'message' => 'Payment session not paid.'
+            ], 400);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error verifying payment: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Failed to verify payment: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
