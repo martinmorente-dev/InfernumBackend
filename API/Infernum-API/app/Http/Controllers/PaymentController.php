@@ -110,7 +110,7 @@ class PaymentController extends Controller
         }
 
         $origin = $request->header('origin') ?? env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
-        $successUrl = rtrim($origin, '/') . '/profile?payment=success&session_id={CHECKOUT_SESSION_ID}';
+        $successUrl = rtrim($origin, '/') . '/profile?payment=success&checkout_id={CHECKOUT_SESSION_ID}';
         $cancelUrl = rtrim($origin, '/') . '/store?payment=cancel';
 
         try {
@@ -154,10 +154,10 @@ class PaymentController extends Controller
     public function verifyPayment(\Illuminate\Http\Request $request): JsonResponse
     {
         $request->validate([
-            'session_id' => 'required|string'
+            'checkout_id' => 'required|string'
         ]);
 
-        $sessionId = $request->input('session_id');
+        $sessionId = $request->input('checkout_id');
 
         $stripeSecret = env('STRIPE_SECRET');
         if (empty($stripeSecret) || str_contains($stripeSecret, 'tu_clave') || str_contains($stripeSecret, 'your_stripe') || str_contains($stripeSecret, '******')) {
