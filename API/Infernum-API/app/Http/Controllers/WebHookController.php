@@ -16,7 +16,7 @@ class WebHookController extends CashierWebHookController
         if ($userId)
         {
             $user = User::find($userId);
-            if ($user)
+            if ($user && $user->shoppingCart)
             {
                 $gameIds = $user->shoppingCart->cartItems->pluck('game_id')->toArray();
 
@@ -24,7 +24,7 @@ class WebHookController extends CashierWebHookController
 
                 $user->shoppingCart->cartItems()->delete();
 
-                $user->shoppingCart()->delete();
+                $user->shoppingCart->delete();
             }
         }
         return $this->successMethod();

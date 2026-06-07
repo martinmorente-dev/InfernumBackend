@@ -13,7 +13,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
 
     // Auth Routes
     Route::get('/user', [UserController::class, 'getUserAuthenticated'])->middleware('auth:sanctum');
-    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/login', [UserController::class, 'login'])->middleware([
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+    ]);
     Route::post('/register', [UserController::class, 'register']);
 
 

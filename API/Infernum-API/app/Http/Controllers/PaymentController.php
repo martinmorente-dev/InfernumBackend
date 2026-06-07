@@ -109,13 +109,17 @@ class PaymentController extends Controller
             return $this->processMockCheckout($request);
         }
 
+        $origin = $request->header('origin') ?? env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
+        $successUrl = rtrim($origin, '/') . '/profile?payment=success';
+        $cancelUrl = rtrim($origin, '/') . '/store?payment=cancel';
+
         try {
             $session = Cashier::stripe()->checkout->sessions->create([
                 'mode' => 'payment',
                 'customer_email' => Auth::user()->email,
                 'line_items' => $lineItems,
-                'success_url' => 'https://frontend-infernum-original.duckdns.org/profile?payment=success',
-                'cancel_url' => 'https://frontend-infernum-original.duckdns.org/store?payment=cancel',
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelUrl,
                 'metadata' => [
                     'user_id' => Auth::user()->id
                 ]
@@ -139,9 +143,11 @@ class PaymentController extends Controller
         $request->shoppingCart->cartItems()->delete();
         $request->shoppingCart->delete();
 
+        $origin = $request->header('origin') ?? 'http://localhost:4220';
+
         return response()->json([
             'state' => 'Success',
-            'url' => 'http://localhost:4220/profile?payment=success'
+            'url' => rtrim($origin, '/') . '/profile?payment=success'
         ]);
     }
 }

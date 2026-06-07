@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers'], function () {
 
@@ -11,3 +11,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers'], funct
 
 
 });
+
+Route::get('/administratorPanel/autologin', [UserController::class, 'autologin'])->name('admin.autologin');
+
+Route::get('/login', function () {
+    $host = request()->getHost();
+    if ($host === 'localhost' || $host === '127.0.0.1') {
+        return redirect('http://localhost:4220/login');
+    }
+    $frontendUrl = env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
+    return redirect(rtrim($frontendUrl, '/') . '/login');
+})->name('login');

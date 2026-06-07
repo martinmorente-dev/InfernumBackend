@@ -14,6 +14,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'id', type: 'integer', example: 1),
         new OA\Property(property: 'type', type: 'enum', example: 'min'),
         new OA\Property(property: 'os', type: 'string', example: 'Windows 10'),
+        new OA\Property(property: 'cpu', type: 'string', example: 'Intel Core i5'),
         new OA\Property(property: 'ram', type: 'string', example: '16 GB'),
         new OA\Property(property: 'gpu', type: 'string', example: 'Nvidia Geforce 3060'),
         new OA\Property(property: 'storage', type: 'string', example: '10GB')
@@ -27,6 +28,7 @@ class RequirementResource extends JsonResource
             'id' => $this->id,
             'type' => $this->type,
             'os' => $this->os,
+            'cpu' => $this->cpu,
             'ram' => $this->ram,
             'gpu' => $this->gpu,
             'storage' => $this->storage

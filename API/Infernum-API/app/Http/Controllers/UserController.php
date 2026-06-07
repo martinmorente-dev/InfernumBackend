@@ -11,6 +11,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
@@ -54,16 +55,30 @@ class UserController extends Controller
             return response()->json(['status' => 'Error: Incorrect credentials'], 401);
 
         Auth::login($user);
-        if ($user->role != 'admin')
+        if ($user->role != 'admin') {
             $token = $user->createToken('client', ['buy', 'cart', 'library', 'view-profile'], now()->addHour(3))->plainTextToken;
-        else
-            $token = $user->createToken('admin', ['admin'], now()->addHour(3))->plainTextToken;
+            $adminRedirectUrl = null;
+        } else {
+            $token = $user->createToken('admin', ['admin', 'buy', 'cart', 'library', 'view-profile'], now()->addHour(3))->plainTextToken;
+            
+            $originalUrl = url()->current();
+            URL::forceRootUrl(config('app.url'));
+            
+            $adminRedirectUrl = URL::temporarySignedRoute(
+                'admin.autologin',
+                now()->addMinutes(2),
+                ['user' => $user->id]
+            );
+            
+            URL::forceRootUrl($originalUrl);
+        }
 
         return response()->json([
             'status' => 'Successfull',
             'user' => UserResource::make($user),
             'expires_in_hours' => 3,
-            'token' => $token
+            'token' => $token,
+            'admin_redirect_url' => $adminRedirectUrl
         ], 200);
     }
 
@@ -148,5 +163,22 @@ class UserController extends Controller
             'status' => 'Succesfull',
             'user' => $request->user()
         ]);
+    }
+
+    public function autologin(Request $request)
+    {
+        if (! $request->hasValidSignature()) {
+            abort(401, 'Invalid or expired autologin link.');
+        }
+
+        $user = User::findOrFail($request->user);
+
+        if ($user->role !== 'admin') {
+            abort(403, 'Unauthorized.');
+        }
+
+        Auth::guard('web')->login($user);
+
+        return redirect('/administratorPanel');
     }
 }

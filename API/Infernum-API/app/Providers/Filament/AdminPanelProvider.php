@@ -26,7 +26,6 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('administratorPanel')
-            ->login()
             ->brandName('Infernum Admin Panel')
             ->colors([
                 'primary' => Color::Amber,
