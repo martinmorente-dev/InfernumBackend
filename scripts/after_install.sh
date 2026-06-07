@@ -72,6 +72,9 @@ docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html
 
 # Cachear configuración y rutas
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
+  php artisan config:clear
+
+docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
   php artisan config:cache
 
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
@@ -84,4 +87,3 @@ docker compose -f setup/docker-compose.prod.yml exec -T app \
   service apache2 reload
 
 echo "Deploy completado exitosamente."
-
