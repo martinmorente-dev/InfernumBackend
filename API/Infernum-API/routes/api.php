@@ -39,7 +39,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
     Route::prefix('cart')->middleware(['auth:sanctum', 'refresh.token', 'abilities:cart'])->group(function () {
         Route::get('show', [ShoppingCartController::class, 'show'])->name('showGame');
         Route::post('/create', [ShoppingCartController::class, 'create']);
-        Route::get('/cart/cancel', [ShoppingCartController::class, 'cancel']);
+        Route::delete('/cancel', [ShoppingCartController::class, 'cancel']);
     });
 
     // Library Routes
