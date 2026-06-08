@@ -27,6 +27,9 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
+      - name: Check identity
+        run: aws sts get-caller-identity
+
       - name: Zip source code
         run: |
           zip -r code-deploy-app.zip . \
@@ -44,3 +47,4 @@ jobs:
             --application-name backend-app \
             --deployment-group-name backend-group \
             --s3-location bucket="${{ vars.BUCKET }}",key="$GITHUB_SHA.zip",bundleType="zip"
+
