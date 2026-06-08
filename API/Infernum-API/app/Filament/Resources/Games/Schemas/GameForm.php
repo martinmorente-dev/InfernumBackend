@@ -84,7 +84,7 @@ class GameForm
                                     ->helperText('Max 5 MB · JPG, PNG, GIF, WEBP')
                                     ->required()
                                     ->formatStateUsing(function ($state) {
-                                        $base = 'https://backend-infernum-original.duckdns.org/storage/';
+                                        $base = 'https://frontend-infernum-original.duckdns.org/storage/';
                                         if ($state && str_starts_with($state, $base))
                                             return str_replace('storage/', '', $state);
                                         if ($state && str_starts_with($state, $base))
