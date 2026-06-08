@@ -30,6 +30,9 @@ class CartItemsResource extends JsonResource
     {
         $imageUrl = $this->game->portraitImage?->url;
         if ($imageUrl && !str_starts_with($imageUrl, 'http://') && !str_starts_with($imageUrl, 'https://')) {
+            if (str_starts_with($imageUrl, 'storage/')) {
+                $imageUrl = str_replace('storage/', '', $imageUrl);
+            }
             $imageUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($imageUrl);
         }
 

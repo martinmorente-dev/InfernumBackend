@@ -82,7 +82,19 @@ class GameForm
                                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
                                     ->maxSize(5120)
                                     ->helperText('Max 5 MB · JPG, PNG, GIF, WEBP')
-                                    ->required(),
+                                    ->required()
+                                    ->formatStateUsing(function ($state) {
+                                        if ($state && str_starts_with($state, 'storage/')) {
+                                            return str_replace('storage/', '', $state);
+                                        }
+                                        return $state;
+                                    })
+                                    ->dehydrateStateUsing(function ($state) {
+                                        if ($state && !str_starts_with($state, 'storage/')) {
+                                            return 'storage/' . $state;
+                                        }
+                                        return $state;
+                                    }),
                             ])
                             ->columns(2)
                             ->addActionLabel('Add Image')

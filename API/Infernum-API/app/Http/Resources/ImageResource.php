@@ -27,6 +27,9 @@ class ImageResource extends JsonResource
         // If the url is a relative storage path (uploaded via Filament), resolve it.
         // External URLs (http/https) are returned as-is.
         if ($url && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+            if (str_starts_with($url, 'storage/')) {
+                $url = str_replace('storage/', '', $url);
+            }
             $url = Storage::disk('public')->url($url);
         }
 
