@@ -22,3 +22,14 @@ Route::get('/login', function () {
     $frontendUrl = env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
     return redirect(rtrim($frontendUrl, '/') . '/login');
 })->name('login');
+
+Route::get('/storage/{path}', function ($path) {
+    if (str_contains($path, '..')) {
+        abort(400, 'Invalid path.');
+    }
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath) || !is_file($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');
