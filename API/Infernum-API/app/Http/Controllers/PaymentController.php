@@ -110,7 +110,7 @@ class PaymentController extends Controller
 
         $origin = $request->header('origin') ?? env('FRONTEND_URL', 'https://frontend-infernum-original.duckdns.org');
         $successUrl = rtrim($origin, '/') . '/profile?payment=success&checkout_id={CHECKOUT_SESSION_ID}';
-        $cancelUrl = rtrim($origin, '/') . '/store?payment=cancel';
+        $cancelUrl = rtrim($origin, '/') . '/profile?payment=cancel';
 
         // Collect game IDs from the cart to store in Stripe metadata
         $gameIds = $cartItems->map(fn($item) => $item->game_id)->join(',');
