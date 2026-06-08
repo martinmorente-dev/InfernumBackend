@@ -96,6 +96,11 @@ class GameForm
                                         if (str_starts_with($state, 'http')) return $state;
                                         $path = ltrim(str_replace('storage/', '', $state), '/');
                                         return 'https://backend-infernum-original.duckdns.org/storage/' . $path;
+                                    })
+                                    ->getUploadedFileUrlUsing(function ($file) {
+                                        if (str_starts_with($file, 'http')) return $file;
+                                        $path = ltrim(str_replace('storage/', '', $file), '/');
+                                        return 'https://backend-infernum-original.duckdns.org/storage/' . $path;
                                     }),
                             ])
                             ->columns(2)
