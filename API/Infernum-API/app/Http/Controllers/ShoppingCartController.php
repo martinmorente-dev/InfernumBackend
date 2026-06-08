@@ -161,7 +161,7 @@ class ShoppingCartController extends Controller
 
         if ($cart) {
             $cart->cartItems()->delete();
-            $cart()->delete();
+            $cart->delete();
         }
 
         return response()->json(['status' => 'Success', 'message' => 'Cart cancelled and deleted']);
