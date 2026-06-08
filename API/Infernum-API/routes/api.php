@@ -22,8 +22,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
 
 
     // Games Route
-    Route::prefix('games')->group(function ()
-    {
+    Route::prefix('games')->group(function () {
         Route::get('/details/{id}', [GameController::class, 'details']);
         Route::get('/all/{pagination?}', [GameController::class, 'all']);
         Route::get('/filter', [GameController::class, 'filterGame']);
@@ -31,23 +30,20 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers'], function
     });
 
     // Profile routes
-    Route::prefix('profile')->middleware(['auth:sanctum', 'refresh.token', 'abilities:view-profile'])->group(function ()
-    {
+    Route::prefix('profile')->middleware(['auth:sanctum', 'refresh.token', 'abilities:view-profile'])->group(function () {
         Route::get('/show', [ProfileController::class, 'show']);
         Route::put('/update', [ProfileController::class, 'updateProfile']);
     });
 
     // Shopping Cart Routes
-    Route::prefix('cart')->middleware(['auth:sanctum', 'refresh.token', 'abilities:cart'])->group(function ()
-    {
+    Route::prefix('cart')->middleware(['auth:sanctum', 'refresh.token', 'abilities:cart'])->group(function () {
         Route::get('show', [ShoppingCartController::class, 'show'])->name('showGame');
         Route::post('/create', [ShoppingCartController::class, 'create']);
-        Route::put('/update', [ShoppingCartController::class, 'updateQuantity']);
+        Route::get('/cart/cancel', [ShoppingCartController::class, 'cancel']);
     });
 
     // Library Routes
-    Route::prefix('library')->middleware(['auth:sanctum', 'refresh.token', 'abilities:library'])->group(function ()
-    {
+    Route::prefix('library')->middleware(['auth:sanctum', 'refresh.token', 'abilities:library'])->group(function () {
         Route::get('/games', [LibraryController::class, 'show']);
     });
 

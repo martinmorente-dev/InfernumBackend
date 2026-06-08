@@ -11,69 +11,69 @@ use OpenApi\Attributes as OA;
 class PaymentController extends Controller
 {
     #[OA\Post(
-    path: '/v1/buy',
-    operationId: 'buy',
-    tags: ['Payment'],
-    security: [['sanctum' => []]],
-    summary: 'Process cart purchase (TOKEN REQUIRED)',
-    description: '**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`\\n3. **Execute this route** → Redirects to **Stripe Checkout** ✅\\n\\n**Validations:**\\n- **shoppingCartId**: Required, integer, must exist in `shopping_carts`\\n- Shopping cart must belong to the **authenticated user**\\n- Shopping cart **MUST NOT be empty**\\n\\n**Flow:**\\n1. Validate cart and load items with games\\n2. Create **Stripe Checkout session** (mode `payment`)\\n3. Generate dynamic **line_items** from `cartItems`\\n4. Return **Stripe URL** for redirection',
-    requestBody: new OA\RequestBody(
-        required: true,
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(
-                    property: 'shoppingCartId',
-                    type: 'integer',
-                    example: 1,
-                    description: 'ID of the shopping cart of the authenticated user'
-                ),
-            ],
-            required: ['shoppingCartId']
-        )
-    ),
-    responses: [
-        new OA\Response(
-            response: 200,
-            description: 'Stripe Checkout session successfully created',
+        path: '/v1/buy',
+        operationId: 'buy',
+        tags: ['Payment'],
+        security: [['sanctum' => []]],
+        summary: 'Process cart purchase (TOKEN REQUIRED)',
+        description: '**NO TOKEN = 401!**\\n\\n1. **POST /v1/login** → copy token\\n2. **Authorize** → paste `Bearer {token}`\\n3. **Execute this route** → Redirects to **Stripe Checkout** ✅\\n\\n**Validations:**\\n- **shoppingCartId**: Required, integer, must exist in `shopping_carts`\\n- Shopping cart must belong to the **authenticated user**\\n- Shopping cart **MUST NOT be empty**\\n\\n**Flow:**\\n1. Validate cart and load items with games\\n2. Create **Stripe Checkout session** (mode `payment`)\\n3. Generate dynamic **line_items** from `cartItems`\\n4. Return **Stripe URL** for redirection',
+        requestBody: new OA\RequestBody(
+            required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: 'state', type: 'string', example: 'Success'),
-                    new OA\Property(property: 'url', type: 'string', example: 'https://checkout.stripe.com/...'),
-                ]
+                    new OA\Property(
+                        property: 'shoppingCartId',
+                        type: 'integer',
+                        example: 1,
+                        description: 'ID of the shopping cart of the authenticated user'
+                    ),
+                ],
+                required: ['shoppingCartId']
             )
         ),
-        new OA\Response(
-            response: 401,
-            description: 'TOKEN required',
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'status', type: 'string', example: 'Error: Unauthenticated'),
-                ]
-            )
-        ),
-        new OA\Response(
-            response: 400,
-            description: 'Validation Error',
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'status', type: 'string', example: 'Error: Failure'),
-                    new OA\Property(property: 'message', type: 'string', example: 'The cart does not belong to the user'),
-                    new OA\Property(property: 'error', type: 'string', example: 'Validation failed'),
-                ]
-            )
-        ),
-        new OA\Response(
-            response: 422,
-            description: 'Validation failed - invalid shoppingCartId',
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'message', type: 'string', example: 'The shopping cart id field is required.'),
-                    new OA\Property(property: 'errors', type: 'object'),
-                ]
-            )
-        ),
-    ]
-)]
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Stripe Checkout session successfully created',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'state', type: 'string', example: 'Success'),
+                        new OA\Property(property: 'url', type: 'string', example: 'https://checkout.stripe.com/...'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'TOKEN required',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'Error: Unauthenticated'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Validation Error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'Error: Failure'),
+                        new OA\Property(property: 'message', type: 'string', example: 'The cart does not belong to the user'),
+                        new OA\Property(property: 'error', type: 'string', example: 'Validation failed'),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation failed - invalid shoppingCartId',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The shopping cart id field is required.'),
+                        new OA\Property(property: 'errors', type: 'object'),
+                    ]
+                )
+            ),
+        ]
+    )]
     public function buy(BuyRequest $request): JsonResponse
     {
 
@@ -81,11 +81,10 @@ class PaymentController extends Controller
 
         $lineItems = [];
 
-        foreach ($cartItems as $item)
-        {
+        foreach ($cartItems as $item) {
             $game = $item->game;
             $price = $game->price;
-            
+
             // Apply active discount if available
             $activeDiscount = $game->discounts()->active()->first();
             if ($activeDiscount) {
@@ -218,7 +217,6 @@ class PaymentController extends Controller
                 'status' => 'Failure',
                 'message' => 'Payment session not paid.'
             ], 400);
-
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Error verifying payment: ' . $e->getMessage());
             return response()->json([

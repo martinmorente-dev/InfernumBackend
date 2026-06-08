@@ -135,14 +135,14 @@ class ShoppingCartController extends Controller
             ], 200);
         }
 
-        if($user->games()->where('game_id', $request->game_id)->exists())
+        if ($user->games()->where('game_id', $request->game_id)->exists())
             return response()->json(['status' => 'Failure', 'message' => 'You already own this game in your library']);
 
         CartItems::create([
-                'shopping_cart_id' => $cart->id,
-                'game_id' => $request->game_id,
-                'price' => $game->price
-            ]);
+            'shopping_cart_id' => $cart->id,
+            'game_id' => $request->game_id,
+            'price' => $game->price
+        ]);
 
         $action = $cart->wasRecentlyCreated ? 'Cart and item created' : 'item added';
 
@@ -154,4 +154,16 @@ class ShoppingCartController extends Controller
         ], 200);
     }
 
+    public function cancel(): JsonResponse
+    {
+        $user = Auth::user();
+        $cart = ShoppingCart::where('user_id', $user->id)->first();
+
+        if ($cart) {
+            $cart->cartItems()->delete();
+            $cart()->delete();
+        }
+
+        return response()->json(['status' => 'Success', 'message' => 'Cart cancelled and deleted']);
+    }
 }
