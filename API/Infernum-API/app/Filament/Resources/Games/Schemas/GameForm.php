@@ -95,7 +95,7 @@ class GameForm
                                         if (!$state) return $state;
                                         if (str_starts_with($state, 'http')) return $state;
                                         $path = ltrim(str_replace('storage/', '', $state), '/');
-                                        return 'https://backend-infernum-original.duckdns.org/storage/' . $path;
+                                        return 'https://frontend-infernum-original.duckdns.org/storage/' . $path;
                                     }),
                             ])
                             ->columns(2)
