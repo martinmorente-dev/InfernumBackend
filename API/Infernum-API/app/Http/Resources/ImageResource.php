@@ -30,6 +30,10 @@ class ImageResource extends JsonResource
             $url = Storage::disk('public')->url($url);
         }
 
+        if ($url && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+            $url = 'https://' . ltrim($url, '/');
+        }
+
         return [
             'id'   => $this->id,
             'url'  => $url,
