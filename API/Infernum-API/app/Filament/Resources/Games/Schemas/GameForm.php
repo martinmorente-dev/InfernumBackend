@@ -84,16 +84,18 @@ class GameForm
                                     ->helperText('Max 5 MB · JPG, PNG, GIF, WEBP')
                                     ->required()
                                     ->formatStateUsing(function ($state) {
-                                        if ($state && str_starts_with($state, 'storage/')) {
+                                        $base = 'https://backend-infernum-original.duckdns.org/storage/';
+                                        if ($state && str_starts_with($state, $base))
                                             return str_replace('storage/', '', $state);
-                                        }
+                                        if ($state && str_starts_with($state, $base))
+                                            return str_replace('storage/', '', $state);
                                         return $state;
                                     })
                                     ->dehydrateStateUsing(function ($state) {
-                                        if ($state && !str_starts_with($state, 'storage/')) {
-                                            return 'storage/' . $state;
-                                        }
-                                        return $state;
+                                        if (!$state) return $state;
+                                        if (str_starts_with($state, 'http')) return $state;
+                                        $path = ltrim(str_replace('storage/', '', $state), '/');
+                                        return 'https://backend-infernum-original.duckdns.org/storage/' . $path;
                                     }),
                             ])
                             ->columns(2)
