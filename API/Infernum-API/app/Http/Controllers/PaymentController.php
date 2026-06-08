@@ -86,7 +86,7 @@ class PaymentController extends Controller
             $price = $game->price;
 
             // Apply active discount if available
-            $activeDiscount = $game->discounts();
+            $activeDiscount = $game->discounts()->first();
             if ($activeDiscount && !($activeDiscount->valid_at <= now() && $activeDiscount->expires_at >= now()))
                 $activeDiscount = null;
             if ($activeDiscount)
