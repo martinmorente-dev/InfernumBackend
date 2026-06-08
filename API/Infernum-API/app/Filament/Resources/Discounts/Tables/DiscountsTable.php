@@ -12,11 +12,11 @@ class DiscountsTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('percentage')->numeric()->suffix('%')->sortable(),
-                TextColumn::make('valid_at')->dateTime()->sortable(),
-                TextColumn::make('expires_at')->dateTime()->sortable(),
+                TextColumn::make('id')->sortable()->label('ID'),
+                TextColumn::make('name')->searchable()->sortable()->label('Discount Name'),
+                TextColumn::make('percentage')->numeric()->suffix('%')->sortable()->label('Percentage'),
+                TextColumn::make('valid_at')->dateTime()->sortable()->label('Valid From'),
+                TextColumn::make('expires_at')->dateTime()->sortable()->label('Expires At'),
             ])
             ->filters([
                 //

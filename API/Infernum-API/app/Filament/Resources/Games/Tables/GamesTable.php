@@ -14,10 +14,11 @@ class GamesTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('short_description')->limit(50)->tooltip(fn (TextColumn $column): ?string => $column->getState()),
-                TextColumn::make('price')->money('EUR')->sortable(),
+                TextColumn::make('id')->sortable()->label('ID'),
+                TextColumn::make('name')->searchable()->sortable()->label('Game Name'),
+                TextColumn::make('short_description')->limit(50)->label('Description')
+                    ->tooltip(fn (TextColumn $column): ?string => $column->getState()),
+                TextColumn::make('price')->money('EUR')->sortable()->label('Price'),
                 TextColumn::make('count_boughts')->numeric(decimalPlaces: 0)->sortable()->label('Sales'),
                 TextColumn::make('discounts.name')->label('Discount')->sortable(),
             ])

@@ -18,7 +18,13 @@ class DiscountResource extends Resource
 {
     protected static ?string $model = Discount::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+
+    protected static ?string $navigationLabel = 'Discounts';
+
+    protected static ?string $modelLabel = 'Discount';
+
+    protected static ?string $pluralModelLabel = 'Discounts';
 
     public static function form(Schema $schema): Schema
     {

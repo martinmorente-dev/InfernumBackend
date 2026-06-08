@@ -13,6 +13,7 @@ class GenreForm
         return $schema
             ->components([
                 TextInput::make('type')
+                    ->label('Genre Name')
                     ->required()
                     ->maxLength(255),
             ]);

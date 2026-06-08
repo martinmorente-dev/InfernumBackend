@@ -13,11 +13,13 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
+                TextColumn::make('nickname')->searchable()->sortable()->label('Username'),
+                TextColumn::make('email')->searchable()->sortable()->label('Email'),
                 TextColumn::make('role')->badge()->color(fn (string $state): string => match ($state) {
                     'admin' => 'danger',
                     'client' => 'success',
                     default => 'gray',
-                })->sortable(),
+                })->sortable()->label('Role'),
             ])
             ->filters([
                 //
@@ -29,6 +31,7 @@ class UsersTable
                 // No bulk delete: admin cannot delete users
             ])
             ->paginated([10, 25, 50])
-            ->defaultPaginationPageOption(10);
+            ->defaultPaginationPageOption(10)
+            ->searchable();
     }
 }

@@ -18,9 +18,13 @@ class GameResource extends Resource
 {
     protected static ?string $model = Game::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPuzzlePiece;
 
     protected static ?string $navigationLabel = 'Games';
+
+    protected static ?string $modelLabel = 'Game';
+
+    protected static ?string $pluralModelLabel = 'Games';
 
     public static function form(Schema $schema): Schema
     {
