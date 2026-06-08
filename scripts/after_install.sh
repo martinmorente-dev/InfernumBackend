@@ -68,7 +68,7 @@ docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html
   rm -rf bootstrap/cache/*.php
 
 docker compose -f setup/docker-compose.prod.yml exec -T -u root -w /var/www/html/public/Infernum-API app \
-  chown -R www-data:www-data bootstrap/cache storage
+  chown -R www-data:www-data bootstrap/cache storage public
 
 # Cachear configuración y rutas
 docker compose -f setup/docker-compose.prod.yml exec -T -u www-data -w /var/www/html/public/Infernum-API app \
