@@ -28,11 +28,16 @@ class CartItemsResource extends JsonResource
 
     public function toArray(Request $request): array
     {
+        $imageUrl = $this->game->portraitImage?->url;
+        if ($imageUrl && !str_starts_with($imageUrl, 'http://') && !str_starts_with($imageUrl, 'https://')) {
+            $imageUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($imageUrl);
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->game->name,
             'short_description' => $this->game->short_description,
-            'image_url' => $this->game->portraitImage?->url
+            'image_url' => $imageUrl
         ];
     }
 }

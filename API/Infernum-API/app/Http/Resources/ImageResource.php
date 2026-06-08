@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 use OpenApi\Attributes as OA;
 
 
@@ -21,10 +22,18 @@ class ImageResource extends JsonResource
 
     public function toArray(Request $request): array
     {
+        $url = $this->url;
+
+        // If the url is a relative storage path (uploaded via Filament), resolve it.
+        // External URLs (http/https) are returned as-is.
+        if ($url && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+            $url = Storage::disk('public')->url($url);
+        }
+
         return [
-            'id' => $this->id,
-            'url' => $this->url,
-            'type' => $this->type
+            'id'   => $this->id,
+            'url'  => $url,
+            'type' => $this->type,
         ];
     }
 }
