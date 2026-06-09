@@ -37,8 +37,14 @@ class GameForm
                             ->required()
                             ->rows(5)
                             ->columnSpanFull(),
+                        Select::make('genres')
+                            ->label('Genres')
+                            ->relationship('genres', 'type')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->columnSpanFull()
                     ]),
-
                 Section::make('Pricing & Discount')
                     ->columns(2)
                     ->schema([
