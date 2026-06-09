@@ -27,13 +27,14 @@ use OpenApi\Attributes as OA;
 )]
 class GameListResource extends JsonResource
 {
- 
+
     public function toArray(Request $request): array
     {
-        $discount = $this->getActiveDiscounts();
-
+        $discount = $this->discounts()->first();
+        if ($discount && !($discount->valid_at <= now() && $discount->expires_at >= now()))
+            $discount = null;
         $finalPrice = $discount ? $this->price - (($this->price * $discount->percentage) / 100) : $this->price;
-        
+
         return [
 
             'id' => $this->id,
@@ -47,9 +48,7 @@ class GameListResource extends JsonResource
             'images' => ImageResource::collection(
                 $this->whenLoaded('images')
             ),
-            'discount' => new DiscountResource(
-                $this->whenLoaded('discounts')
-            )
+            'discount' => $discount ? new DiscountResource($discount) : null,
         ];
     }
 }
