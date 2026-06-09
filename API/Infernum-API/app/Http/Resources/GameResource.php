@@ -53,9 +53,7 @@ class GameResource extends JsonResource
             'requirements' => RequirementResource::collection(
                 $this->whenLoaded('requirements')
             ),
-            'discount' => new DiscountResource(
-                $this->whenLoaded('discounts')
-            )
+            'discount' => $discount ? new DiscountResource($discount) : null
         ];
     }
 }
